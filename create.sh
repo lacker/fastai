@@ -2,14 +2,15 @@
 
 # Create an instance
 
-export IMAGE_FAMILY="pytorch-latest-gpu" # or "pytorch-latest-cpu" for non-GPU instances
-export ZONE="us-central1-f"
-export INSTANCE_NAME="my-fastai-instance"
-export INSTANCE_TYPE="n1-highmem-8" # budget: "n1-highmem-4"
+IMAGE_FAMILY="pytorch-latest-gpu"
+INSTANCE_NAME="my-fastai-instance"
+INSTANCE_TYPE="n1-highmem-8"
+ZONE="us-west1-b"
 
-# budget: 'type=nvidia-tesla-t4,count=1'
+# Control whether we have a preemptible instance
+FLAGS="--preemptible"
+
 gcloud compute instances create $INSTANCE_NAME \
-        --zone=$ZONE \
         --image-family=$IMAGE_FAMILY \
         --image-project=deeplearning-platform-release \
         --maintenance-policy=TERMINATE \
@@ -17,4 +18,5 @@ gcloud compute instances create $INSTANCE_NAME \
         --machine-type=$INSTANCE_TYPE \
         --boot-disk-size=200GB \
         --metadata="install-nvidia-driver=True" \
-        --preemptible
+	--zone=$ZONE \
+        $FLAGS
